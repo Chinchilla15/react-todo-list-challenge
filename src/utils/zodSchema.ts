@@ -30,6 +30,7 @@ const taskSchema = z
       .pipe(
         z.date().min(new Date(), { message: "Due date must be in the future" }),
       ),
+    isCompleted: z.boolean().default(false),
   })
   .required();
 
