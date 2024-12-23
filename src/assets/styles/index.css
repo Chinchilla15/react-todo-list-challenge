@@ -2,6 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 :root {
+  --primary-color: #212731;
+  --secondary-color: #00adb5;
+  --accent-color: #ced4de;
+  --white-color: #ededed;
+  --black-color: #1b1b1b;
+  --blue-color: #1f5293;
+  --red-color: #950101;
+  --low-color: #e9f0e7;
+  --mid-color: #fef5cc;
+  --high-color: #fbe6e6;
+
   font-family:
     system-ui,
     -apple-system,
@@ -38,13 +49,7 @@ body {
 
 @media (prefers-color-scheme: light) {
   :root {
-    color: #213547;
+    color: #000;
     background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
   }
 }

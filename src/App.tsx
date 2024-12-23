@@ -1,9 +1,11 @@
+import Home from "./pages/Home.tsx";
+import { PageLayout } from "./layouts/PageLayout.tsx";
+
 function App() {
   return (
-    <>
-      <h1>Hello, World!</h1>
-      <p>Welcome to your new React app.</p>
-    </>
+    <PageLayout>
+      <Home />
+    </PageLayout>
   );
 }
 
