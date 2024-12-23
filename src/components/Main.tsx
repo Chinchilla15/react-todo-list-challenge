@@ -1,13 +1,13 @@
 import Dialog from "./ui/Dialog";
 import Form from "./Form";
-import { useState, useEffect, useId } from "react";
+import { useState } from "react";
 import { getFromLocalStorage } from "../utils/localStorage";
 import TaskBox from "./ui/TaskBox";
 import type { Task } from "../utils/types";
+import TableHeader from "./ui/TableHeader";
 
 export default function Main() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const id = useId();
 
   const openDialog = () => {
     setIsDialogOpen(true);
@@ -32,22 +32,19 @@ export default function Main() {
         </button>
       </div>
       <ul className="flex w-full flex-col items-center">
-        <li className="border-accent mb-4 flex w-3/4 items-center justify-between px-2 font-semibold">
-          <div className="w-1/4 text-left">Task</div>
-          <div className="w-1/4 text-center">Story Points</div>
-          <div className="w-1/4 text-center">Assignee</div>
-          <div className="w-1/4 text-right">Due Date</div>
-        </li>
+        <TableHeader />
         {localStorageTasks
-          .sort((a: Task, b: Task) => (a.priority === "Urgent" ? -1 : 1))
+          .sort((a: Task, _: Task) => (a.priority === "Urgent" ? -1 : 1))
           .map((task: Task, index: number) => (
             <TaskBox
-              key={`${id}-${index}`}
+              key={`${task.id}-${index}`}
+              id={task.id}
               name={task.taskName}
               priority={task.priority}
               points={task.storyPoints}
               asignee={task.asignee}
               dueDate={task.dueDate}
+              isCompleted={task.isCompleted}
             />
           ))}
       </ul>

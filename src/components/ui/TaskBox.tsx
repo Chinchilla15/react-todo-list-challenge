@@ -1,4 +1,10 @@
-import type { TaskBoxProps } from "../../utils/types";
+import {
+  getFromLocalStorage,
+  saveToLocalStorage,
+} from "../../utils/localStorage";
+import type { TaskBoxProps, Task } from "../../utils/types";
+import { FaRegSquare, FaRegSquareCheck } from "react-icons/fa6";
+import { useState } from "react";
 
 export default function TaskBox({
   name,
@@ -6,8 +12,23 @@ export default function TaskBox({
   points,
   asignee,
   dueDate,
+  isCompleted,
+  id,
 }: TaskBoxProps) {
+  const [completed, setCompleted] = useState(isCompleted);
   const formattedDate = new Date(dueDate).toLocaleDateString();
+
+  const handleToggleComplete = () => {
+    setCompleted((prev) => {
+      const tasks = getFromLocalStorage("tasks");
+      // Use strict ID comparison
+      const updatedTasks = tasks.map((task: Task) =>
+        task.id === id ? { ...task, isCompleted: !prev } : task,
+      );
+      saveToLocalStorage("tasks", updatedTasks);
+      return !prev;
+    });
+  };
 
   return (
     <li
@@ -21,9 +42,14 @@ export default function TaskBox({
               : priority === "Urgent"
                 ? "text-#B91C1C border-black bg-[#a62a3f]"
                 : ""
-      }`}
+      } ${completed ? "opacity-25 hover:bg-none" : ""}`}
     >
-      <h3 className="w-1/4 text-left font-bold">{name}</h3>
+      <div className="flex w-1/4 items-center">
+        <button className="cursor-pointer" onClick={handleToggleComplete}>
+          {completed ? <FaRegSquareCheck /> : <FaRegSquare />}
+        </button>
+        <h3 className="ml-2 text-left font-bold">{name}</h3>
+      </div>
       <p className="w-1/4 text-center"> {points}</p>
       <p className="w-1/4 text-center"> {asignee}</p>
       <p className="w-1/4 text-right"> {formattedDate}</p>

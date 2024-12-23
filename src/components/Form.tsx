@@ -5,7 +5,7 @@ import { z } from "zod";
 import FormField from "./ui/FormField";
 import { FaCheck } from "react-icons/fa6";
 import { FaXmark } from "react-icons/fa6";
-import { useEffect } from "react";
+import { priorityOptions } from "../utils/priorityOptions";
 
 type Task = z.infer<typeof taskSchema>;
 
@@ -19,15 +19,14 @@ export default function Form({ onClose }: { onClose: () => void }) {
     resolver: zodResolver(taskSchema),
   });
 
-  useEffect(() => {
-    return () => {
-      reset();
-    };
-  }, [reset]);
-
   const onSubmit: SubmitHandler<Task> = (data) => {
     const tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
-    tasks.push(data);
+    const taskWithId = {
+      ...data,
+      id: crypto.randomUUID(),
+      isCompleted: false,
+    };
+    tasks.push(taskWithId);
     localStorage.setItem("tasks", JSON.stringify(tasks));
     reset();
     onClose();
@@ -37,13 +36,6 @@ export default function Form({ onClose }: { onClose: () => void }) {
     reset();
     onClose();
   };
-
-  const priorityOptions = [
-    { value: "Urgent", label: "Urgent" },
-    { value: "High", label: "High" },
-    { value: "Medium", label: "Medium" },
-    { value: "Low", label: "Low" },
-  ];
 
   return (
     <form
